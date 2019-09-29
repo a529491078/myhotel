@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.fjzzit.web.myhotel.mapper.RoleInfoMapper">
+  <resultMap id="BaseResultMap" type="com.edu.fjzzit.web.myhotel.model.RoleInfo">
+    <!--@mbg.generated-->
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    role_id, role_name
+  </sql>
+  <insert id="insert" keyColumn="role_id" keyProperty="roleId" parameterType="com.edu.fjzzit.web.myhotel.model.RoleInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into role_info (role_name)
+    values (#{roleName,jdbcType=VARCHAR})
+  </insert>
+</mapper>

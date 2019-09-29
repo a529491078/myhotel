@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.fjzzit.web.myhotel.mapper.PermissionInfoMapper">
+  <resultMap id="BaseResultMap" type="com.edu.fjzzit.web.myhotel.model.PermissionInfo">
+    <!--@mbg.generated-->
+    <id column="permission_id" jdbcType="INTEGER" property="permissionId" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    permission_id, permission_name
+  </sql>
+  <insert id="insert" keyColumn="permission_id" keyProperty="permissionId" parameterType="com.edu.fjzzit.web.myhotel.model.PermissionInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into permission_info (permission_name)
+    values (#{permissionName,jdbcType=VARCHAR})
+  </insert>
+</mapper>

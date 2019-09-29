@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.fjzzit.web.myhotel.mapper.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.edu.fjzzit.web.myhotel.model.UserInfo">
+    <!--@mbg.generated-->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="user_state" jdbcType="TINYINT" property="userState" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, user_name, salt, `password`, create_time, last_time, user_state
+  </sql>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.edu.fjzzit.web.myhotel.model.UserInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_info (user_name, salt, `password`, 
+      create_time, last_time, user_state
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, #{userState,jdbcType=TINYINT}
+      )
+  </insert>
+    <!--根据用户名查询用户信息-->
+    <select id="findFirstByUserName" resultMap="BaseResultMap">
+        select * from user_info where user_name=#{userName,jdbcType=VARCHAR} limit 1
+    </select>
+</mapper>
