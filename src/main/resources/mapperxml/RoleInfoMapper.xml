@@ -15,4 +15,12 @@
     insert into role_info (role_name)
     values (#{roleName,jdbcType=VARCHAR})
   </insert>
+
+  <select id="queryRoleNameByUserId" resultType="string">
+    select ri.role_name
+    from user_info ui
+    inner join user_role u on ui.user_id = u.user_id
+    inner join role_info ri on u.role_id = ri.role_id
+    where ui.user_id=#{userId,jdbcType=INTEGER}
+  </select>
 </mapper>

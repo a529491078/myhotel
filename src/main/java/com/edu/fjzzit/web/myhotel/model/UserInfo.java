@@ -21,4 +21,8 @@ public class UserInfo implements Serializable {
     private Byte userState;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getId(){
+        return userId;
+    }
 }
