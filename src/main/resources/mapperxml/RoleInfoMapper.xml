@@ -23,4 +23,10 @@
     inner join role_info ri on u.role_id = ri.role_id
     where ui.user_id=#{userId,jdbcType=INTEGER}
   </select>
+
+  <select id="findRoleIdByRoleName" resultType="integer">
+    select role_id
+    from role_info
+    where role_name=#{roleName,jdbcType=STRING}
+  </select>
 </mapper>

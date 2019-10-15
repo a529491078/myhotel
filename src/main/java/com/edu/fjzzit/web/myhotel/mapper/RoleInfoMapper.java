@@ -11,4 +11,6 @@ public interface RoleInfoMapper {
     int insert(RoleInfo record);
 
     List<String> queryRoleNameByUserId(@Param("userId") Integer userId);
+
+    Integer findRoleIdByRoleName(@Param("roleName") String roleName);
 }

@@ -1,6 +1,7 @@
 package com.edu.fjzzit.web.myhotel.controller;
 
 import com.edu.fjzzit.web.myhotel.config.ResultJson;
+import com.edu.fjzzit.web.myhotel.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -10,8 +11,10 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +25,10 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户管理")
-public class login {
+public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
@@ -68,11 +74,19 @@ public class login {
 
     @GetMapping("/add_user")
     @ApiOperation("添加用户")
-    @RequiresAuthentication
+    @RequiresRoles(value={"admin"},logical = Logical.OR)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "String",required = true,paramType = "header")
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "String",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户名",dataType = "String",required = true),
+            @ApiImplicitParam(name = "password",value = "密码",dataType = "String",required = true),
+            @ApiImplicitParam(name = "roleName",value = "角色名",dataType = "String",required = true)
     })
-    public ResultJson addUser(){
-        return new ResultJson("200","添加成功!",null);
+    public ResultJson addUser(String username,String password,String roleName){
+        try {
+            userService.addUser(username, password, roleName);
+            return new ResultJson("200","添加用户成功!",null);
+        }catch(Exception e){
+            return new ResultJson("400","添加用户失败!",null);
+        }
     }
 }

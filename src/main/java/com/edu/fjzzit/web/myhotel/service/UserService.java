@@ -19,4 +19,12 @@ public interface UserService {
      * @return 返回用户拥有的所有角色集合
      */
     Set<String> getRoles(Integer userId);
+
+    /**
+     * 添加用户
+     * @param username
+     * @param password
+     * @param roleName
+     */
+    void addUser(String username,String password,String roleName) throws Exception;
 }
