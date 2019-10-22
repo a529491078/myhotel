@@ -14,4 +14,34 @@ public interface UserInfoMapper {
      * @return UserInfo
      */
     UserInfo findFirstByUserName(@Param("userName") String userName);
+
+    /**
+     * 获取用户ID(通过用户名)
+     * @param userName
+     * @return
+     */
+    int getIdByUserName(@Param("userName") String userName);
+
+    /**
+     * 根据用户ID删除用户
+     * @param userId
+     * @return
+     */
+    int deleteByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 修改密码(普通用户)
+     * @param userId
+     * @param password
+     * @return
+     */
+    int updateSelfPassword(@Param("userId") Integer userId,@Param("password") String password);
+
+    /**
+     * 重置密码(管理员)
+     * @param userId
+     * @param password
+     * @return
+     */
+    int updatePassword(@Param("userId") Integer userId,@Param("password") String password,@Param("salt") String salt);
 }

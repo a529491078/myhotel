@@ -28,4 +28,27 @@
     <select id="findFirstByUserName" resultMap="BaseResultMap">
         select * from user_info where user_name=#{userName,jdbcType=VARCHAR} limit 1
     </select>
+  <select id="getIdByUserName" resultType="INTEGER">
+    select user_id
+    from user_info
+    where user_name=#{userName,jdbcType=VARCHAR}
+  </select>
+  <!--根据用户ID删除用户信息-->
+  <delete id="deleteByUserId">
+    delete from user_info
+    where user_id=#{userId,jdbcType=INTEGER}
+  </delete>
+  <!--用户修改密码-->
+  <update id="updateSelfPassword">
+    update user_info
+    SET PASSWORD=#{password,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+  <!--管理员重置用户密码-->
+  <update id="updatePassword">
+    update user_info
+    SET PASSWORD=#{password,jdbcType=VARCHAR},
+    salt=#{salt,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
 </mapper>

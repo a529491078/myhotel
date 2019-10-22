@@ -22,9 +22,30 @@ public interface UserService {
 
     /**
      * 添加用户
-     * @param username
+     * @param userName
      * @param password
      * @param roleName
      */
-    void addUser(String username,String password,String roleName) throws Exception;
+    void addUser(String userName,String password,String roleName) throws Exception;
+
+    /**
+     * 删除用户
+     * @param userName
+     */
+    void delUser(String userName) throws Exception;
+
+    /**
+     * 修改密码(普通用户)
+     * @param oldPwd
+     * @param password
+     * @throws Exception
+     */
+    void resetSelfPassword(String oldPwd,String password) throws Exception;
+
+    /**
+     * 重置密码(管理员)
+     * @param userName
+     * @param password
+     */
+    void resetPassword(String userName,String password) throws Exception;
 }

@@ -1,6 +1,7 @@
 package com.edu.fjzzit.web.myhotel.controller;
 
 import com.edu.fjzzit.web.myhotel.config.ResultJson;
+import com.edu.fjzzit.web.myhotel.model.UserInfo;
 import com.edu.fjzzit.web.myhotel.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +13,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,21 +74,70 @@ public class UserController {
         return new ResultJson("400","您不具备相应权限!",null);
     }
 
-    @GetMapping("/add_user")
+    @PostMapping("/add_user")
     @ApiOperation("添加用户")
     @RequiresRoles(value={"admin"},logical = Logical.OR)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "String",required = true,paramType = "header"),
-            @ApiImplicitParam(name = "userName",value = "用户名",dataType = "String",required = true),
-            @ApiImplicitParam(name = "password",value = "密码",dataType = "String",required = true),
-            @ApiImplicitParam(name = "roleName",value = "角色名",dataType = "String",required = true)
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户名",dataType = "string",required = true),
+            @ApiImplicitParam(name = "password",value = "密码",dataType = "string",required = true),
+            @ApiImplicitParam(name = "roleName",value = "角色名",dataType = "string",required = true)
     })
-    public ResultJson addUser(String username,String password,String roleName){
+    public ResultJson addUser(String userName,String password,String roleName){
         try {
-            userService.addUser(username, password, roleName);
+            userService.addUser(userName, password, roleName);
             return new ResultJson("200","添加用户成功!",null);
         }catch(Exception e){
             return new ResultJson("400","添加用户失败!",null);
+        }
+    }
+
+    @PostMapping("/delete_user")
+    @ApiOperation("删除用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户名",dataType = "string",required = true),
+    })
+    public ResultJson deleteUser(String userName){
+        try{
+            userService.delUser(userName);
+            return new ResultJson("200","删除用户成功!",null);
+        }catch(Exception e){
+            return new ResultJson("400","删除用户失败!",null);
+        }
+    }
+
+    @PostMapping("/reset_password")
+    @ApiOperation("管理员重置密码")
+    @RequiresRoles(value={"admin"},logical = Logical.OR)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户名",dataType = "string",required = true),
+            @ApiImplicitParam(name = "password",value = "新密码",dataType = "string",required = true),
+    })
+    public ResultJson resetPassword(String userName,String password){
+        try{
+            userService.resetPassword(userName,password);
+            return new ResultJson("200","管理员重置密码成功!",null);
+        }catch(Exception e){
+            return new ResultJson("400","管理员重置密码失败!",null);
+        }
+    }
+
+    @PostMapping("/reset_self_password")
+    @ApiOperation("用户修改密码")
+    @RequiresAuthentication
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "oldPwd",value = "旧密码",dataType = "string",required = true),
+            @ApiImplicitParam(name = "password",value = "新密码",dataType = "string",required = true),
+    })
+    public ResultJson resetSelfPassword(String oldPwd,String password){
+        try{
+            userService.resetSelfPassword(oldPwd,password);
+            return new ResultJson("200","用户修改密码成功!",null);
+        }catch(Exception e){
+            return new ResultJson("400","用户修改密码失败!",null);
         }
     }
 }

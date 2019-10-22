@@ -31,9 +31,9 @@ public class ShiroConfig {
 
         shiroFilterFactoryBean.setSecurityManager(securityManager); //设置安全管理器
 
+        shiroFilterFactoryBean.setSuccessUrl("/");
         shiroFilterFactoryBean.setLoginUrl("/user/need_login");
         shiroFilterFactoryBean.setUnauthorizedUrl("/user/unauth");
-        shiroFilterFactoryBean.setSuccessUrl("/user/login");
 
         //使用LinkedHashMap链表，实现顺序存储
         LinkedHashMap<String,String> filterMap=new LinkedHashMap<>();

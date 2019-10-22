@@ -27,6 +27,6 @@
   <select id="findRoleIdByRoleName" resultType="integer">
     select role_id
     from role_info
-    where role_name=#{roleName,jdbcType=STRING}
+    where role_name=#{roleName,jdbcType=VARCHAR}
   </select>
 </mapper>
