@@ -25,13 +25,32 @@
       )
   </insert>
     <!--根据用户名查询用户信息-->
-    <select id="findFirstByUserName" resultMap="BaseResultMap">
+  <select id="findFirstByUserName" resultMap="BaseResultMap">
         select * from user_info where user_name=#{userName,jdbcType=VARCHAR} limit 1
-    </select>
+   </select>
+  <!--根据用户ID查询用户信息-->
+  <select id="findFirstByUserId" resultMap="BaseResultMap">
+        select * from user_info where user_id=#{userId,jdbcType=INTEGER} limit 1
+   </select>
+  <!--根据用户ID查询用户信息 List-->
+  <select id="findFirstByUserIdList" resultMap="BaseResultMap">
+        select * from user_info where user_id=#{userId,jdbcType=INTEGER} limit 1
+   </select>
+  <!--获取所有用户信息-->
+  <select id="getAllUserInfo" resultMap="BaseResultMap">
+    select * from user_info
+  </select>
+  <!--获取用户ID-->
   <select id="getIdByUserName" resultType="INTEGER">
     select user_id
     from user_info
     where user_name=#{userName,jdbcType=VARCHAR}
+  </select>
+  <!--获取角色ID-->
+  <select id="getRoleIdByRoleName" resultType="INTEGER">
+    select role_id
+    from role_info
+    where role_name=#{roleName,jdbcType=VARCHAR}
   </select>
   <!--根据用户ID删除用户信息-->
   <delete id="deleteByUserId">
@@ -49,6 +68,18 @@
     update user_info
     SET PASSWORD=#{password,jdbcType=VARCHAR},
     salt=#{salt,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+  <!--管理员设置用户状态-->
+  <update id="setAccountState">
+    update user_info
+    set user_state=#{userState,jdbcType=INTEGER}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+  <!--管理员设置用户角色-->
+  <update id="updateRoles">
+    update user_role
+    set role_id=#{roleId,jdbcType=INTEGER}
     where user_id=#{userId,jdbcType=INTEGER}
   </update>
 </mapper>

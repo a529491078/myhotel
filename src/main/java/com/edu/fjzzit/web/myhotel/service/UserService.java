@@ -2,6 +2,8 @@ package com.edu.fjzzit.web.myhotel.service;
 
 import com.edu.fjzzit.web.myhotel.model.UserInfo;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface UserService {
@@ -46,6 +48,45 @@ public interface UserService {
      * 重置密码(管理员)
      * @param userName
      * @param password
+     * @throws Exception
      */
     void resetPassword(String userName,String password) throws Exception;
+
+    /**
+     * 禁用用户(管理员)
+     * @param userName
+     * @throws Exception
+     */
+    void disableAccount(String userName) throws Exception;
+
+    /**
+     * 恢复用户(管理员)
+     * @param userName
+     * @throws Exception
+     */
+    void enableAccount(String userName) throws Exception;
+
+    /**
+     * 重置角色(管理员)
+     * @param userName
+     * @param roleName
+     * @throws Exception
+     */
+    void resetRoles(String userName,String roleName) throws Exception;
+
+    /**
+     * 查询个人信息(普通用户)
+     * @return
+     * @throws Exception
+     */
+    Map<String,Object> findSelfUserInfo() throws Exception;
+
+    /**
+     * 查询指定用户信息(管理员)
+     * @param userName
+     * @return
+     * @throws Exception
+     */
+    List<UserInfo> findAllUserInfo(String userName) throws Exception;
+
 }

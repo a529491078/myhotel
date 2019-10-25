@@ -1,6 +1,7 @@
 package com.edu.fjzzit.web.myhotel.controller;
 
 import com.edu.fjzzit.web.myhotel.config.ResultJson;
+import com.edu.fjzzit.web.myhotel.model.MyException;
 import com.edu.fjzzit.web.myhotel.model.UserInfo;
 import com.edu.fjzzit.web.myhotel.service.UserService;
 import io.swagger.annotations.Api;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -119,7 +122,11 @@ public class UserController {
         try{
             userService.resetPassword(userName,password);
             return new ResultJson("200","管理员重置密码成功!",null);
-        }catch(Exception e){
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
             return new ResultJson("400","管理员重置密码失败!",null);
         }
     }
@@ -133,11 +140,115 @@ public class UserController {
             @ApiImplicitParam(name = "password",value = "新密码",dataType = "string",required = true),
     })
     public ResultJson resetSelfPassword(String oldPwd,String password){
-        try{
-            userService.resetSelfPassword(oldPwd,password);
-            return new ResultJson("200","用户修改密码成功!",null);
-        }catch(Exception e){
+        try {
+            userService.resetSelfPassword(oldPwd, password);
+            return new ResultJson("200", "用户修改密码成功!", null);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
             return new ResultJson("400","用户修改密码失败!",null);
+        }
+    }
+
+    @PostMapping("/disable_Account")
+    @ApiOperation("禁用账户")
+    @RequiresRoles(value={"admin"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户",dataType = "string",required = true),
+    })
+    public ResultJson disableAccount(String userName){
+        try{
+            userService.disableAccount(userName);
+            return new ResultJson("200","禁用用户成功!",null);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
+            return new ResultJson("400","禁用用户失败!",null);
+        }
+    }
+
+    @PostMapping("/enable_Account")
+    @ApiOperation("恢复账户")
+    @RequiresRoles(value={"admin"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户",dataType = "string",required = true),
+    })
+    public ResultJson enableAccount(String userName){
+        try{
+            userService.enableAccount(userName);
+            return new ResultJson("200","恢复用户成功!",null);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
+            return new ResultJson("400","恢复用户失败!",null);
+        }
+    }
+
+    @PostMapping("/reset_Roles")
+    @ApiOperation("管理员重置角色")
+    @RequiresRoles(value={"admin"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户",dataType = "string",required = true),
+            @ApiImplicitParam(name = "roleName",value = "角色",dataType = "string",required = true),
+    })
+    public ResultJson resetRoles(String userName,String roleName){
+        try{
+            userService.resetRoles(userName,roleName);
+            return new ResultJson("200","重置角色成功!",null);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
+            return new ResultJson("400","重置角色失败!",null);
+        }
+    }
+
+    @PostMapping("/find_Self_UserInfo")
+    @ApiOperation("用户查询个人信息")
+    @RequiresAuthentication
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+    })
+    public ResultJson findSelfUserInfo(){
+        try{
+            Map<String,Object> userInfo=userService.findSelfUserInfo();
+            return new ResultJson("200","查询信息成功!",userInfo);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
+            return new ResultJson("400","查询信息失败!",null);
+        }
+    }
+
+    @PostMapping("/find_All_UserInfo")
+    @ApiOperation("管理员查询用户信息")
+    @RequiresRoles(value={"admin"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "userName",value = "用户",dataType = "string",required = true),
+    })
+    public ResultJson findAllUserInfo(String userName){
+        try{
+            List<UserInfo> userAllInfo=userService.findAllUserInfo(userName);
+            return new ResultJson("200","查询信息成功!",userAllInfo);
+        }
+        catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }
+        catch(Exception e){
+            return new ResultJson("400","查询信息失败!",null);
         }
     }
 }
