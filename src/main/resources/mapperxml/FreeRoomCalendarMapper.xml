@@ -19,6 +19,14 @@
     -->
     free_room_calendar_num, room_type_num, calendar_date, total_count, free_count
   </sql>
+    <!--查询空房数-->
+  <select id="selectByCheckDate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select room_type_num,min(free_count) as free_count
+    from free_room_calendar
+    where calendar_date <![CDATA[>=]]> #{checkInDate,jdbcType=VARCHAR}
+      and calendar_date <![CDATA[<]]> #{checkOutDate,jdbcType=VARCHAR}
+    group by room_type_num
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated

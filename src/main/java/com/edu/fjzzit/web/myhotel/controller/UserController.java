@@ -67,12 +67,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/need_login")
+    @PostMapping("/need_login")
     public ResultJson needLogin(){
         return new ResultJson("400","请先登陆!",null);
     }
 
-    @GetMapping("/unauth")
+    @PostMapping("/unauth")
     public ResultJson unauth(){
         return new ResultJson("400","您不具备相应权限!",null);
     }
