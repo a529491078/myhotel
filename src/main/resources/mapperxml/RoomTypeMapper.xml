@@ -19,6 +19,12 @@
     -->
     room_type_num, room_type_name, bed_type, floor, room_type_decs
   </sql>
+  <select id="getRoomTypeNumByRoomTypeNameAndBedType" resultType="java.lang.Long">
+    select room_type_num
+    from room_type
+    where room_type_name=#{roomTypeName,jdbcType=VARCHAR}
+      and bed_type=#{bedType,jdbcType=VARCHAR}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     <!--
       WARNING - @mbggenerated

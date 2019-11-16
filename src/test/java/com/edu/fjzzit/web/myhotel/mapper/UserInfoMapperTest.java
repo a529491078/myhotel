@@ -1,5 +1,8 @@
 package com.edu.fjzzit.web.myhotel.mapper;
 
+import com.edu.fjzzit.web.myhotel.dto.RoomOrderDetailDTO;
+import com.edu.fjzzit.web.myhotel.model.RoomOrder;
+import com.edu.fjzzit.web.myhotel.model.RoomOrderDetail;
 import com.edu.fjzzit.web.myhotel.model.UserInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -13,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
@@ -21,6 +25,9 @@ public class UserInfoMapperTest {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private RoomOrderMapper roomOrderMapper;
 
     @Test
     public void testFindFirstByUserName(){
@@ -57,5 +64,30 @@ public class UserInfoMapperTest {
 
         int insertResult=userInfoMapper.insert(userInfo);
         Assert.assertEquals(insertResult,1);
+    }
+
+    @Test
+    public void getBedType(){
+        String roomTypeName="普通房";
+        String roomPriceName="普通房大床";
+        String bedType=roomPriceName.substring(roomTypeName.length());//获取床型
+        System.out.println(bedType);
+    }
+
+    @Test
+    public void getRoomOrderNum(){
+        RoomOrder roomOrder=new RoomOrder();
+
+        roomOrder.setCustomerName("张三123");
+        roomOrder.setCustomerPhone("12312222321");
+        roomOrder.setRoomOrderState(Byte.parseByte("0"));
+        roomOrderMapper.insert(roomOrder);//插入订单
+
+        //获取生成的订单的流水号
+        Long roomOrderNum=roomOrderMapper.selectRoomOrderNumByCustomerName("张三123");
+
+        System.out.println("roomOrderNum->"+roomOrderNum);
+
+        //Long roomOrderNum=roomOrder.getRoomOrderNum();
     }
 }

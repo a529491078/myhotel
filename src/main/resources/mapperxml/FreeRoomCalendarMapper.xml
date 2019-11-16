@@ -24,9 +24,17 @@
     select room_type_num,min(free_count) as free_count
     from free_room_calendar
     where calendar_date <![CDATA[>=]]> #{checkInDate,jdbcType=VARCHAR}
-      and calendar_date <![CDATA[<]]> #{checkOutDate,jdbcType=VARCHAR}
+      and calendar_date <![CDATA[<=]]> #{checkOutDate,jdbcType=VARCHAR}
     group by room_type_num
   </select>
+  <!--更新空房数-->
+  <update id="updateFreeCount">
+    update free_room_calendar
+    set free_count=free_count-#{count,jdbcType=INTEGER}
+    where calendar_date <![CDATA[>=]]> #{checkInDate,jdbcType=VARCHAR}
+      and calendar_date <![CDATA[<=]]> #{checkOutDate,jdbcType=VARCHAR}
+      and room_type_num=#{roomTypeNum,jdbcType=BIGINT}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated

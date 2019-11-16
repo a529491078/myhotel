@@ -2,6 +2,7 @@ package com.edu.fjzzit.web.myhotel.controller;
 
 import com.edu.fjzzit.web.myhotel.config.ResultJson;
 import com.edu.fjzzit.web.myhotel.dto.FreeRoomDTO;
+import com.edu.fjzzit.web.myhotel.dto.RoomOrderDTO;
 import com.edu.fjzzit.web.myhotel.service.RoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +25,7 @@ public class RoomOrderController {
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/getFreeRoom")
+    @PostMapping("/get_FreeRoom")
     @ApiOperation("查询空房")
     @RequiresAuthentication
     @ApiImplicitParams({
@@ -40,8 +42,24 @@ public class RoomOrderController {
         }
     }
 
-    public ResultJson reserveRoom(){
-        return null;
+    @PostMapping("/reserve_room")
+    @ApiOperation("订房")
+    @RequiresAuthentication
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+    })
+    public ResultJson reserveRoom(@RequestBody RoomOrderDTO roomOrderDTO){
+        try{
+            Long roomOrderNum=roomService.reserveRoom(roomOrderDTO);
+
+            System.out.println("getCustomerName->"+roomOrderDTO.getCustomerName());
+            System.out.println("getCustomerPhone->"+roomOrderDTO.getCustomerPhone());
+
+            return new ResultJson("200","预定成功!","您的订单号为："+roomOrderNum);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResultJson("400","预定失败!",null);
+        }
     }
 
 }

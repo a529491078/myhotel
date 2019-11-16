@@ -1,12 +1,12 @@
 package com.edu.fjzzit.web.myhotel.service.impl;
 
 import com.edu.fjzzit.web.myhotel.dto.FreeRoomDTO;
-import com.edu.fjzzit.web.myhotel.mapper.FreeRoomCalendarMapper;
-import com.edu.fjzzit.web.myhotel.mapper.RoomPriceMapper;
-import com.edu.fjzzit.web.myhotel.mapper.RoomTypeMapper;
+import com.edu.fjzzit.web.myhotel.dto.RoomOrderDTO;
+import com.edu.fjzzit.web.myhotel.dto.RoomOrderDetailDTO;
+import com.edu.fjzzit.web.myhotel.mapper.*;
 import com.edu.fjzzit.web.myhotel.model.FreeRoomCalendar;
-import com.edu.fjzzit.web.myhotel.model.RoomPrice;
-import com.edu.fjzzit.web.myhotel.model.RoomType;
+import com.edu.fjzzit.web.myhotel.model.RoomOrder;
+import com.edu.fjzzit.web.myhotel.model.RoomOrderDetail;
 import com.edu.fjzzit.web.myhotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,15 @@ public class RoomServicelmpl implements RoomService {
 
     @Autowired
     private RoomPriceMapper roomPriceMapper;
+
+    @Autowired
+    private RoomTypeMapper roomTypeMapper;
+
+    @Autowired
+    private RoomOrderMapper roomOrderMapper;
+
+    @Autowired
+    private RoomOrderDetailMapper roomOrderDetailMapper;
 
     /**
      * 查找空房
@@ -80,5 +89,69 @@ public class RoomServicelmpl implements RoomService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 订房
+     * @param roomOrderDTO
+     * @return
+     */
+    @Override
+    public Long reserveRoom(RoomOrderDTO roomOrderDTO) {
+        RoomOrder roomOrder;
+        RoomOrderDetail roomOrderDetail;
+
+        String customerName=roomOrderDTO.getCustomerName();
+        String customerPhone= roomOrderDTO.getCustomerPhone();
+
+        roomOrder=new RoomOrder();
+        roomOrder.setCustomerName(customerName);
+        roomOrder.setCustomerPhone(customerPhone);
+        roomOrder.setRoomOrderState(Byte.parseByte("0"));
+        roomOrderMapper.insert(roomOrder);//插入订单
+        //获取生成的订单的流水号
+        Long roomOrderNum=roomOrderMapper.selectRoomOrderNumByCustomerName(customerName);
+
+        List<RoomOrderDetailDTO> roomOrderDetailDTOList=roomOrderDTO.getRoomOrderDetailDTOList();
+        for (RoomOrderDetailDTO rddDTO:roomOrderDetailDTOList
+             ) {
+            String roomTypeName=rddDTO.getRoomTypeName();
+            String roomPriceName=rddDTO.getRoomPriceName();
+            String bedType=roomPriceName.substring(roomTypeName.length());//获取床型
+            Long roomTypeNum=roomTypeMapper.getRoomTypeNumByRoomTypeNameAndBedType(roomTypeName,bedType);//1
+
+            Integer roomPrice=rddDTO.getRoomPrice();
+            String breakfastType=rddDTO.getBreakfastType();
+            Integer roomCount=rddDTO.getRoomCount();
+            String checkInDate=rddDTO.getCheckInDate();
+            String checkOutDate=rddDTO.getCheckOutDate();
+            Integer roomOrderDetailPrice=roomPrice*roomCount;//计算总价
+
+            roomOrderDetail=new RoomOrderDetail();
+            roomOrderDetail.setRoomOrderNum(roomOrderNum);
+            roomOrderDetail.setRoomTypeUnm(roomTypeNum);
+            roomOrderDetail.setRoomPriceName(roomPriceName);
+            roomOrderDetail.setRoomPrice(roomPrice);
+            roomOrderDetail.setBreakfastType(breakfastType);
+            roomOrderDetail.setRoomCount(roomCount);
+            roomOrderDetail.setCheckInTime(checkInDate);
+            roomOrderDetail.setCheckOutTime(checkOutDate);
+            roomOrderDetail.setRoomOrderDetailPrice(roomOrderDetailPrice);
+
+            roomOrderDetailMapper.insert(roomOrderDetail);//插入订单详情
+            updateFreeCount(roomTypeNum,checkInDate,checkOutDate,roomCount);//更新空房数,保持数据正确性和一致性
+        }
+
+        return roomOrderNum;
+    }
+
+    /**
+     * 更新空房数(成功订房，更新房间空房数)
+     * @param roomTypeNum
+     * @param checkInDate
+     * @param checkOutCheck
+     */
+    private void updateFreeCount(Long roomTypeNum,String checkInDate,String checkOutCheck,Integer count){
+        freeRoomCalendarMapper.updateFreeCount(roomTypeNum,checkInDate,checkOutCheck,count);
     }
 }
