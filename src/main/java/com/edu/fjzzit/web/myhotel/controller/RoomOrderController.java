@@ -52,9 +52,6 @@ public class RoomOrderController {
         try{
             Long roomOrderNum=roomService.reserveRoom(roomOrderDTO);
 
-            System.out.println("getCustomerName->"+roomOrderDTO.getCustomerName());
-            System.out.println("getCustomerPhone->"+roomOrderDTO.getCustomerPhone());
-
             return new ResultJson("200","预定成功!","您的订单号为："+roomOrderNum);
         }catch(Exception e){
             e.printStackTrace();
