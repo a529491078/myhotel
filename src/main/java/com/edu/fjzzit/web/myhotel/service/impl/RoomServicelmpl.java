@@ -129,7 +129,7 @@ public class RoomServicelmpl implements RoomService {
 
             roomOrderDetail=new RoomOrderDetail();
             roomOrderDetail.setRoomOrderNum(roomOrderNum);
-            roomOrderDetail.setRoomTypeUnm(roomTypeNum);
+            roomOrderDetail.setRoomTypeNum(roomTypeNum);
             roomOrderDetail.setRoomPriceName(roomPriceName);
             roomOrderDetail.setRoomPrice(roomPrice);
             roomOrderDetail.setBreakfastType(breakfastType);
