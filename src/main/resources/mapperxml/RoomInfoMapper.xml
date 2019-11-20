@@ -18,6 +18,22 @@
     -->
     room_id, building_num, room_num, room_type_num
   </sql>
+  <select id="selectRoomNumByRoomTypeNum" resultType="java.lang.String">
+    select room_num
+    from room_info
+    where room_type_num=#{roomTypeNum,jdbcType=BIGINT} and room_state=#{roomState,jdbcType=INTEGER}
+  </select>
+  <!--查询房间号是否存在-->
+  <select id="queryRoomNumIsExists" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*)
+    from room_info
+    where room_num=#{roomNum,jdbcType=VARCHAR}
+  </select>
+  <update id="updateRoomStateByRoomNum">
+    update room_info
+    set room_state=#{roomState,jdbcType=INTEGER}
+    where room_num=#{roomNum,jdbcType=VARCHAR}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated

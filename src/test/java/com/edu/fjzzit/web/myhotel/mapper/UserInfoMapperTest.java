@@ -29,6 +29,12 @@ public class UserInfoMapperTest {
     @Autowired
     private RoomOrderMapper roomOrderMapper;
 
+    @Autowired
+    private RoomInfoMapper roomInfoMapper;
+
+    @Autowired
+    private CheckInInfoMapper checkInInfoMapper;
+
     @Test
     public void testFindFirstByUserName(){
         UserInfo userInfo=userInfoMapper.findFirstByUserName("admin");
@@ -89,5 +95,22 @@ public class UserInfoMapperTest {
         System.out.println("roomOrderNum->"+roomOrderNum);
 
         //Long roomOrderNum=roomOrder.getRoomOrderNum();
+    }
+
+    @Test
+    public void checkin(){
+        /*Integer roomNumIsExists=roomInfoMapper.queryRoomNumIsExists("2012");
+        if (null==roomNumIsExists||roomNumIsExists==0) {//房间号不存在
+            System.out.println("not in");
+        }else{
+            System.out.println("exsits in");
+        }*/
+
+        Long roomOrderNum= checkInInfoMapper.queryIsExistsOrder("张林育","1231");
+        if (roomOrderNum!=null&&roomOrderNum!=0) {//存在订单流水号，有预定房间
+            System.out.println("exsits in");
+        }else{
+            System.out.println("not in");
+        }
     }
 }

@@ -25,6 +25,18 @@
     room_order_detail_num, room_order_num, room_type_num, room_price_name, room_price, 
     breakfast_type, room_count, check_in_time, check_out_time, room_order_detail_price
   </sql>
+  <!--根据订单流水号查询房间类型流水号-->
+  <select id="queryRoomTypeNumByRoomOrderNum" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select room_type_num
+    from room_order_detail
+    where room_order_num=#{roomOrderNum,jdbcType=BIGINT}
+  </select>
+  <!--根据订单流水号查询订房数-->
+  <select id="queryRoomCountByRoomOrderNum" resultType="java.lang.Integer">
+    select room_count
+    from room_order_detail
+    where room_order_num=#{roomOrderNum,jdbcType=BIGINT}
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated
