@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "房间入住登记管理")
 public class RoomCheckInController {
 
+    //测试分支
+
     @Autowired
     private CheckInInfoService checkInInfoService;
 
