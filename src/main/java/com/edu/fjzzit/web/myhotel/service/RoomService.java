@@ -21,4 +21,11 @@ public interface RoomService {
      * @return
      */
     Long reserveRoom(RoomOrderDTO roomOrderDTO);
+
+    /**
+     * 取消订单
+     * @param orderNum
+     * @throws Exception
+     */
+    void cancelOrder(Long orderNum) throws Exception;
 }

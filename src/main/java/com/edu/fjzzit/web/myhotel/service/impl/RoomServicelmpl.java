@@ -4,9 +4,7 @@ import com.edu.fjzzit.web.myhotel.dto.FreeRoomDTO;
 import com.edu.fjzzit.web.myhotel.dto.RoomOrderDTO;
 import com.edu.fjzzit.web.myhotel.dto.RoomOrderDetailDTO;
 import com.edu.fjzzit.web.myhotel.mapper.*;
-import com.edu.fjzzit.web.myhotel.model.FreeRoomCalendar;
-import com.edu.fjzzit.web.myhotel.model.RoomOrder;
-import com.edu.fjzzit.web.myhotel.model.RoomOrderDetail;
+import com.edu.fjzzit.web.myhotel.model.*;
 import com.edu.fjzzit.web.myhotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -143,6 +141,24 @@ public class RoomServicelmpl implements RoomService {
         }
 
         return roomOrderNum;
+    }
+
+    /**
+     * 取消订单
+     * @param orderNum
+     * @throws Exception
+     */
+    @Override
+    public void cancelOrder(Long orderNum) throws Exception {
+        Byte orderState=roomOrderMapper.findOrderState(orderNum);
+        System.out.println("状态值为："+orderState);
+        if (orderState==Byte.parseByte("0")) {
+            roomOrderMapper.cancelOrderByNum(orderNum, Byte.parseByte("2"));
+        }else if(orderState==Byte.parseByte("1")){
+            throw new MyException(ErrorCodeEnum.IS_CHECKIN);
+        }else if(orderState==Byte.parseByte("2")){
+            throw new MyException(ErrorCodeEnum.IS_CHANCELED);
+        }
     }
 
     /**

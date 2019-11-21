@@ -30,6 +30,16 @@
     set room_order_state=#{roomOrderState,jdbcType=TINYINT}
     where room_order_num=#{roomOrderNum,jdbcType=BIGINT}
   </update>
+  <!--查询是否已入住-->
+  <select id="findOrderState" parameterType="java.lang.Long" resultType="java.lang.Byte">
+    select room_order_state from room_order where room_order_num=#{orderNum,jdbcType=BIGINT}
+  </select>
+  <!--取消订单-->
+  <update id="cancelOrderByNum">
+    update room_order
+    set room_order_state=#{orderState,jdbcType=TINYINT}
+    where room_order_num=#{orderNum,jdbcType=BIGINT}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated

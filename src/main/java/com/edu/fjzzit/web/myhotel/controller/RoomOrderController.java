@@ -3,6 +3,7 @@ package com.edu.fjzzit.web.myhotel.controller;
 import com.edu.fjzzit.web.myhotel.config.ResultJson;
 import com.edu.fjzzit.web.myhotel.dto.FreeRoomDTO;
 import com.edu.fjzzit.web.myhotel.dto.RoomOrderDTO;
+import com.edu.fjzzit.web.myhotel.model.MyException;
 import com.edu.fjzzit.web.myhotel.service.RoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -56,6 +57,25 @@ public class RoomOrderController {
         }catch(Exception e){
             e.printStackTrace();
             return new ResultJson("400","预定失败!",null);
+        }
+    }
+
+    @PostMapping("/cancelOrder")
+    @ApiOperation("取消订单")
+    @RequiresAuthentication
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
+            @ApiImplicitParam(name = "orderNum",value = "订单号",dataType = "string",required = true)
+    })
+    public ResultJson cancellationOfOrder(Long orderNum){
+        try{
+            roomService.cancelOrder(orderNum);
+            return new ResultJson("200","取消成功!",null);
+        }catch(MyException e){
+            return new ResultJson(e.getErrorCode(),e.getDescription(),null);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResultJson("400","取消失败!",null);
         }
     }
 
