@@ -25,7 +25,7 @@ public class OrderManagementController  {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
     })
-    public ResultJson fingRoomInfoAllByPage(@RequestParam(defaultValue="1")Integer pageNum, @RequestParam(defaultValue="5")Integer pageSize){
+    public ResultJson fingOrderInfoAllByPage(@RequestParam(defaultValue="1")Integer pageNum, @RequestParam(defaultValue="5")Integer pageSize){
         try{
             Page page = orderManagementService.findRoomOrderDetailAll(pageNum, pageSize);
             return new ResultJson("200","查询成功!",page);
