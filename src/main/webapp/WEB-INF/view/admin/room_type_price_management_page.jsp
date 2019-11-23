@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>订单管理页面</title>
+    <title>客房管理页面</title>
 </head>
 <body>
 <div class="hrms_dept_container">
@@ -28,36 +28,29 @@
                 <!-- Table -->
                 <table class="table table-bordered table-hover" id="dept_table">
                     <thead>
-                        <th>订单编号</th>
-                        <th>客房套餐名称</th>
-                        <th>套餐价格</th>
+                        <th>客房编号</th>
+                        <th>客房类型</th>
+                        <th>床型</th>
+                        <th>楼层</th>
+                        <th>客房套餐</th>
                         <th>早餐类型</th>
-                        <th>入住时间</th>
-                        <th>离开时间</th>
-                        <th>顾客姓名</th>
-                        <th>顾客电话</th>
-                        <th>预订间数</th>
-                        <th>总价格</th>
-                        <th>入住状态</th>
+                        <th>套餐价格</th>
+                        <th>类型描述</th>
                     </thead>
                     <tbody>
-                        <c:forEach items="${page.list}" var="order">
+                        <c:forEach items="${page.list}" var="tyep_price">
                             <tr>
-                                <td  style="display:none">${order.roomOrderDetailNum}</td>
-                                <td>${order.roomOrderNum}</td>
-                                <td>${order.roomPriceName}</td>
-                                <td>${order.roomPrice}</td>
-                                <td>${order.breakfastType}</td>
-                                <td>${order.checkInTime}</td>
-                                <td>${order.checkOutTime}</td>
-                                <td>${order.customerName}</td>
-                                <td>${order.customerPhone}</td>
-                                <td>${order.roomCount}</td>
-                                <td>${order.roomOrderDetailPrice}</td>
-                                <td>${order.roomOrderState}</td>
+                                <td>${tyep_price.roomTypeNum}</td>
+                                <td>${tyep_price.roomTypeName}</td>
+                                <td>${tyep_price.bedType}</td>
+                                <td>${tyep_price.floor}</td>
+                                <td>${tyep_price.roomPriceName}</td>
+                                <td>${tyep_price.breakfastType}</td>
+                                <td>${tyep_price.roomPrice}</td>
+                                <td>${tyep_price.roomTypeDecs}</td>
                                 <td>
-                                    <a href="#" role="button" class="btn btn-primary order_edit_btn" data-toggle="modal" data-target=".order-update-modal">编辑</a>
-                                    <a href="#" role="button" class="btn btn-danger order_delete_btn">删除</a>
+                                    <a href="#" role="button" class="btn btn-primary tyep_price_edit_btn" data-toggle="modal" data-target=".room-update-modal">编辑</a>
+                                    <a href="#" role="button" class="btn btn-danger tyep_price_delete_btn">删除</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -70,7 +63,7 @@
                     </div>
                     <nav aria-label="Page navigation" class="pull-right">
                         <ul class="pagination">
-                            <li><a href="get_room_order_page?pageNumber=1">首页</a></li>
+                            <li><a href="get_room_type_price_page?pageNumber=1">首页</a></li>
                             <c:if test="${page.pageNumber==1}">
                                 <li class="disabled">
                                     <a href="#" aria-label="Previous" class="prePage">
@@ -88,10 +81,10 @@
 
                             <c:forEach begin="1" end="${page.total<5?page.total:5}" step="1" var="itemPage">
                                 <c:if test="${page.pageNumber == itemPage}">
-                                    <li class="active"><a href="get_room_order_page?pageNumber=${itemPage}">${itemPage}</a></li>
+                                    <li class="active"><a href="get_room_type_price_page?pageNumber=${itemPage}">${itemPage}</a></li>
                                 </c:if>
                                 <c:if test="${page.pageNumber != itemPage}">
-                                    <li><a href="get_room_order_page?pageNumber=${itemPage}">${itemPage}</a></li>
+                                    <li><a href="get_room_type_price_page?pageNumber=${itemPage}">${itemPage}</a></li>
                                 </c:if>
                             </c:forEach>
 
@@ -109,7 +102,7 @@
                                     </a>
                                 </li>
                             </c:if>
-                            <li><a href="get_room_order_page?pageNumber=${page.total}">尾页</a></li>
+                            <li><a href="get_room_type_price_page?pageNumber=${page.total}">尾页</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -129,28 +122,27 @@
     $(".prePage").click(function () {
          if (pageNumber > 1){
              var pageNo = pageNumber - 1;
-             $(this).attr("href", "get_room_order_page?pageNumber="+pageNo);
+             $(this).attr("href", "get_room_type_price_page?pageNumber="+pageNo);
          }
     });
     //下一页
     $(".nextPage").click(function () {
         if (pageNumber < total){
             var pageNo = pageNumber + 1;
-            $(this).attr("href", "get_room_order_page?pageNumber="+pageNo);
+            $(this).attr("href", "get_room_type_price_page?pageNumber="+pageNo);
         }
     });
     //删除
-    $(".order_delete_btn").click(function () {
-        var delRoomOrderDetailNum = $(this).parent().parent().find("td:eq(0)").text();
-        var delOrderId = $(this).parent().parent().find("td:eq(1)").text();
+    $(".tyep_price_delete_btn").click(function () {
+        var delRoomTypeNum = $(this).parent().parent().find("td:eq(0)").text();
         var pageNumber = ${page.pageNumber};
-        if (confirm("确认删除订单编号为【"+ delOrderId +"】的信息吗？")){
-        	$.post("del_room_order_byid?roomOrderDetailNum="+delRoomOrderDetailNum,function(result){
+        if (confirm("确认删除套餐编号为【"+ delRoomTypeNum +"】的信息吗？")){
+        	$.post("del_room_type_price_byid?roomTypeNum="+delRoomTypeNum,function(result){
         		 if (result.code == 200){
-                     alert(result.msg);
-                     window.location.href="get_room_order_page?pageNumber="+pageNumber;
+                     alert("删除成功！");
+                     window.location.href="get_room_type_price_page?pageNumber="+pageNumber;
                  }else {
-                     alert(result.msg);
+                     alert("删除失败！");
                  }
         	})
         }

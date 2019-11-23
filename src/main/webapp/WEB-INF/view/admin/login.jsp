@@ -83,16 +83,16 @@
 					data:{adminName:username,adminPassword:password},
 					type:'post',
 					dataType:'json',
-					success:function(data){
-						if(data.datas != 'success'){
-							alert(data.msg);
-							window.location.replace('index');
+					success:function(result){
+						if(result.datas != 'success'){
+							alert(result.msg);
+							window.location.replace('main');
 							//window.location.href( '/view/admin/index.jsp');
 						}else{
 							removeClass(document.querySelector(".login"), "active");
 							removeClass(document.querySelector(".sk-rotating-plane"), "active");
 							document.querySelector(".login").style.display = "block";
-							alert(data.msg);
+							alert(result.msg);
 							//changeCpacha();
 						}
 					}

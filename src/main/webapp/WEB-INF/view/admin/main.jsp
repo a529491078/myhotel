@@ -1,9 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>XXX公司人力资源系统后台</title>
+    <title>酒店资源后台管理</title>
 </head>
 <body>
+<div id="loading" style="position:absolute;z-index:1000;top:0px;left:0px;width:100%;height:100%;background:#FFFFFF;text-align :center;padding-top:6%;">
+    <img src="/static/admin/easyui/images/loading.jpg" width="50%">
+</div>
 <div class="hrms_container">
     <!-- 导航条 -->
     <%@ include file="/WEB-INF/commom/head.jsp"%>
@@ -68,4 +71,14 @@
     <%@ include file="/WEB-INF/commom/foot.jsp"%>
 </div><!-- /.hrms_container -->
 </body>
+<script type="text/javascript">
+    $(function(){
+        $('.wu-side-tree a').bind("click",function(){
+            var title = $(this).text();
+            var url = $(this).attr('data-link');
+            var iconCls = $(this).attr('data-icon');
+            var iframe = $(this).attr('iframe')==1?true:false;
+        });
+    })
+</script>
 </html>

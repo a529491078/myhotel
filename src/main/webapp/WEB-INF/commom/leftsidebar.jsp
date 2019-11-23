@@ -22,7 +22,8 @@
             </a>
             <ul class="nav nav-pills nav-stacked" id="collapse_dept">
                 <li role="presentation"><a href="#" class="room_info">客房信息</a></li>
-                <li role="presentation"><a href="#" role="button" class="room_add_btn" data-toggle="modal" data-target=".room-add-modal">客房新增</a></li>
+                <li role="presentation"><a href="#" class="room_type_price_info">客房套餐信息</a></li>
+                <li role="presentation"><a href="#" class="room_add_btn">客房新增</a></li>
                 <li role="presentation"><a href="#" class="room_clearall_btn">客房清零</a></li>
             </ul>
         </li>
@@ -36,6 +37,12 @@
     });
     $(".room_info").click(function () {
         $(this).attr("href", "get_room_info_page");
+    });
+    $(".room_type_price_info").click(function () {
+        $(this).attr("href", "get_room_type_price_page");
+    });
+    $(".room_add_btn").click(function () {
+        $(this).attr("href", "add_room_info");
     });
     $(".order_clearall_btn").click(function () {
         alert("对不起，您暂无权限进行操作！请先获取权限");

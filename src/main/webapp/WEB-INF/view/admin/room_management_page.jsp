@@ -144,8 +144,8 @@
         var delRoomName = $(this).parent().parent().find("td:eq(2)").text();
         var pageNumber = ${page.pageNumber};
         if (confirm("确认房间号为删除【"+ delRoomName +"】的信息吗？")){
-        	$.post("deptDel?delDeptId="+delRoomId,function(result){
-        		 if (result.code == 100){
+        	$.post("del_room_info_byid?roomId="+delRoomId,function(result){
+        		 if (result.code == 200){
                      alert("删除成功！");
                      window.location.href="get_room_info_page?pageNumber="+pageNumber;
                  }else {
