@@ -6,10 +6,6 @@ import com.edu.fjzzit.web.myhotel.dto.RoomTypeAndRoomPriceDTO;
 import com.edu.fjzzit.web.myhotel.model.Page;
 import com.edu.fjzzit.web.myhotel.model.RoomInfo;
 import com.edu.fjzzit.web.myhotel.service.RoomManagementService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -73,14 +69,9 @@ public class RoomManagementController {
         }
     }
 
-    @PostMapping("/ins_room_type_price_info")
-    @ApiOperation("添加客房套餐信息")
-    @RequiresRoles(value={"admin"})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
-    })
-    public ResultJson insRoomTypeAndRoomPrice(@RequestBody RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
-        System.out.println(roomTypeAndRoomPriceDTO);
+    @RequestMapping("/ins_room_type_price_info")
+    @ResponseBody
+    public ResultJson insRoomTypeAndRoomPrice(RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
         try{
             roomManagementService.insRoomTypeAndRoomPrice(roomTypeAndRoomPriceDTO);
             return new ResultJson("200","添加成功!",null);
@@ -89,16 +80,29 @@ public class RoomManagementController {
             return new ResultJson("400","添加失败!",null);
         }
     }
-
     @RequestMapping("/get_room_info_byid")
     @ResponseBody
-    public ResultJson findRoomInfoById(Integer roomNum){
+    public ResultJson findRoomInfoById(Integer roomId){
         try{
-            RoomInfo roomInfoById = roomManagementService.findRoomInfoById(roomNum);
+            RoomInfo roomInfoById = roomManagementService.findRoomInfoById(roomId);
             return new ResultJson("200", "查询成功!", roomInfoById);
         }catch(Exception e){
             e.printStackTrace();
             return new ResultJson("400","查询失败!",null);
+        }
+    }
+
+    @RequestMapping("/get_upd_room_info_byid")
+    public ModelAndView findUpdRoomInfoById(Integer roomId){
+        try{
+            RoomInfo roomInfoById = roomManagementService.findRoomInfoById(roomId);
+            ModelAndView modelAndView=new ModelAndView();
+            modelAndView.addObject("roomInfo",roomInfoById);
+            modelAndView.setViewName("/view/admin/edit_room_info");
+            return modelAndView;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -123,32 +127,25 @@ public class RoomManagementController {
         }
     }
 
-    @PostMapping("/get_room_type_price_byid")
-    @ApiOperation("根据ID查询客房套餐信息")
-    @RequiresRoles(value={"admin"})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
-            @ApiImplicitParam(name = "roomTypeNum",value = "客房ID",dataType = "string",required = true),
-    })
-    public ResultJson findRoomTypeAndRoomPriceById(Long roomTypeNum){
+    @RequestMapping("/get_upd_room_type_price_byid")
+    public ModelAndView findRoomTypeAndRoomPriceById(Long roomTypeNum){
         try{
             RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceById = roomManagementService.findRoomTypeAndRoomPriceById(roomTypeNum);
-            return new ResultJson("200","查询成功!",roomTypeAndRoomPriceById);
+            ModelAndView modelAndView=new ModelAndView();
+            modelAndView.addObject("roomTypePrice",roomTypeAndRoomPriceById);
+            modelAndView.setViewName("/view/admin/edit_room_type_price");
+            return modelAndView;
         }catch(Exception e){
             e.printStackTrace();
-            return new ResultJson("400","查询失败!",null);
+            return null;
         }
     }
 
 
 
-    @PostMapping("/upd_room_info_byid")
-    @ApiOperation("根据ID修改客房信息")
-    @RequiresRoles(value={"admin"})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
-    })
-    public ResultJson updRoomInfoAll(@RequestBody RoomInfo roomInfo){
+    @RequestMapping("/upd_room_info_byid")
+    @ResponseBody
+    public ResultJson updRoomInfoAll(RoomInfo roomInfo){
         try{
             roomManagementService.updRoomInfoAll(roomInfo);
             return new ResultJson("200","修改成功!",null);
@@ -158,13 +155,9 @@ public class RoomManagementController {
         }
     }
 
-    @PostMapping("/upd_room_type_price_byid")
-    @ApiOperation("根据ID修改客房套餐信息")
-    @RequiresRoles(value={"admin"})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token",value = "鉴权Token",dataType = "string",required = true,paramType = "header"),
-    })
-    public ResultJson updRoomTypeAndRoomPriceAll(@RequestBody RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
+    @RequestMapping("/upd_room_type_price_byid")
+    @ResponseBody
+    public ResultJson updRoomTypeAndRoomPriceAll(RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
         try{
             roomManagementService.updRoomTypeAndRoomPriceAll(roomTypeAndRoomPriceDTO);
             return new ResultJson("200","修改成功!",null);

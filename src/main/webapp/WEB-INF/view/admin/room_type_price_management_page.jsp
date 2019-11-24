@@ -49,7 +49,7 @@
                                 <td>${tyep_price.roomPrice}</td>
                                 <td>${tyep_price.roomTypeDecs}</td>
                                 <td>
-                                    <a href="#" role="button" class="btn btn-primary tyep_price_edit_btn" data-toggle="modal" data-target=".room-update-modal">编辑</a>
+                                    <a href="get_upd_room_type_price_byid?roomTypeNum=${tyep_price.roomTypeNum}" role="button" class="btn btn-primary tyep_price_edit_btn">编辑</a>
                                     <a href="#" role="button" class="btn btn-danger tyep_price_delete_btn">删除</a>
                                 </td>
                             </tr>

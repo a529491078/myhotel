@@ -43,7 +43,6 @@
                     <tbody>
                         <c:forEach items="${page.list}" var="order">
                             <tr>
-                                <td  style="display:none">${order.roomOrderDetailNum}</td>
                                 <td>${order.roomOrderNum}</td>
                                 <td>${order.roomPriceName}</td>
                                 <td>${order.roomPrice}</td>
@@ -55,8 +54,11 @@
                                 <td>${order.roomCount}</td>
                                 <td>${order.roomOrderDetailPrice}</td>
                                 <td>${order.roomOrderState}</td>
+                                <c:if test="${order.roomOrderState==0}"><td>未入住</td></c:if>
+                                <c:if test="${order.roomOrderState==1}"><td>已入住</td></c:if>
+                                <c:if test="${order.roomOrderState==2}"><td>已取消</td></c:if>
                                 <td>
-                                    <a href="#" role="button" class="btn btn-primary order_edit_btn" data-toggle="modal" data-target=".order-update-modal">编辑</a>
+                                    <a href="get_upd_room_order_byid?roomOrderDetailNum=${order.roomOrderDetailNum}" role="button" class="btn btn-primary order_edit_btn">编辑</a>
                                     <a href="#" role="button" class="btn btn-danger order_delete_btn">删除</a>
                                 </td>
                             </tr>

@@ -186,6 +186,11 @@
      select * from room_type where room_type_num=#{roomTypeNum,jdbcType=BIGINT}
   </select>
 
+  <!-- 根据room_type_name查询客房类型id -->
+  <select id="findRoomTypeNumByRoomTypeNanme" resultType="java.lang.Long">
+     select room_type_num from room_type where room_type_name=#{roomTypeName,jdbcType=VARCHAR}
+  </select>
+
   <!-- 根据room_type_num查询客房价格表-->
   <select id="findRoomPriceByRoomTypeNum" resultMap="RoomPriceMap">
      select * from room_price where room_type_num=#{roomTypeNum,jdbcType=BIGINT}
