@@ -6,11 +6,14 @@ import com.edu.fjzzit.web.myhotel.dto.RoomTypeAndRoomPriceDTO;
 import com.edu.fjzzit.web.myhotel.model.Page;
 import com.edu.fjzzit.web.myhotel.model.RoomInfo;
 import com.edu.fjzzit.web.myhotel.service.RoomManagementService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.channels.MulticastChannel;
 import java.util.List;
 
 @Controller
@@ -71,9 +74,11 @@ public class RoomManagementController {
 
     @RequestMapping("/ins_room_type_price_info")
     @ResponseBody
-    public ResultJson insRoomTypeAndRoomPrice(RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
+    public ResultJson insRoomTypeAndRoomPrice(MultipartFile file, RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
         try{
-            roomManagementService.insRoomTypeAndRoomPrice(roomTypeAndRoomPriceDTO);
+            //roomManagementService.insRoomTypeAndRoomPrice(roomTypeAndRoomPriceDTO);
+            System.out.println(file.getOriginalFilename());
+            System.out.println(roomTypeAndRoomPriceDTO);
             return new ResultJson("200","添加成功!",null);
         }catch(Exception e){
             e.printStackTrace();

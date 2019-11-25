@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>客房管理页面</title>
+    <title>客户管理页面</title>
 </head>
 <body>
 <div class="hrms_dept_container">
@@ -21,38 +21,35 @@
                 <!-- 路径导航 -->
                 <div class="panel-heading">
                     <ol class="breadcrumb">
-                        <li><a href="#">订单管理</a></li>
-                        <li class="active">订单信息</li>
+                        <li><a href="#">客户管理</a></li>
+                        <li class="active">客户信息</li>
                     </ol>
                 </div>
                 <!-- Table -->
                 <table class="table table-bordered table-hover" id="dept_table">
                     <thead>
-                        <th>客房编号</th>
-                        <th>客房类型</th>
-                        <th>床型</th>
-                        <th>详图</th>
-                        <th>楼层</th>
-                        <th>客房套餐</th>
-                        <th>早餐类型</th>
-                        <th>套餐价格</th>
-                        <th>类型描述</th>
+                        <th>顾客编号</th>
+                        <th>顾客昵称</th>
+                        <th>顾客姓名</th>
+                        <th>顾客性别</th>
+                        <th>顾客电话</th>
+                        <th>顾客身份证号</th>
+                        <th>地址</th>
                     </thead>
                     <tbody>
-                        <c:forEach items="${page.list}" var="tyep_price">
+                        <c:forEach items="${page.list}" var="customerInfo">
                             <tr>
-                                <td>${tyep_price.roomTypeNum}</td>
-                                <td>${tyep_price.roomTypeName}</td>
-                                <td>${tyep_price.bedType}</td>
-                                <td><img src="${tyep_price.roomTypeImg}" width="100" height="100"></td>
-                                <td>${tyep_price.floor}</td>
-                                <td>${tyep_price.roomPriceName}</td>
-                                <td>${tyep_price.breakfastType}</td>
-                                <td>${tyep_price.roomPrice}</td>
-                                <td>${tyep_price.roomTypeDecs}</td>
+                                <td>${customerInfo.customerNum}</td>
+                                <td>${customerInfo.customerNickName}</td>
+                                <td>${customerInfo.customerName}</td>
+                                <c:if test="${customerInfo.customerSex==0}"><td>男</td></c:if>
+                                <c:if test="${customerInfo.customerSex==1}"><td>女</td></c:if>
+                                <td>${customerInfo.customerPhone}</td>
+                                <td>${customerInfo.customerId}</td>
+                                <td>${customerInfo.customerAddress}</td>
                                 <td>
-                                    <a href="get_upd_room_type_price_byid?roomTypeNum=${tyep_price.roomTypeNum}" role="button" class="btn btn-primary tyep_price_edit_btn">编辑</a>
-                                    <a href="#" role="button" class="btn btn-danger tyep_price_delete_btn">删除</a>
+                                    <a href="get_customer_info_byid?customerNum=${customerInfo.customerNum}" role="button" class="btn btn-primary customer_edit_btn">编辑</a>
+                                    <a href="#" role="button" class="btn btn-danger customer_delete_btn">删除</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -65,7 +62,7 @@
                     </div>
                     <nav aria-label="Page navigation" class="pull-right">
                         <ul class="pagination">
-                            <li><a href="get_room_type_price_page?pageNumber=1">首页</a></li>
+                            <li><a href="get_customer_info_page?pageNumber=1">首页</a></li>
                             <c:if test="${page.pageNumber==1}">
                                 <li class="disabled">
                                     <a href="#" aria-label="Previous" class="prePage">
@@ -83,10 +80,10 @@
 
                             <c:forEach begin="1" end="${page.total<5?page.total:5}" step="1" var="itemPage">
                                 <c:if test="${page.pageNumber == itemPage}">
-                                    <li class="active"><a href="get_room_type_price_page?pageNumber=${itemPage}">${itemPage}</a></li>
+                                    <li class="active"><a href="get_customer_info_page?pageNumber=${itemPage}">${itemPage}</a></li>
                                 </c:if>
                                 <c:if test="${page.pageNumber != itemPage}">
-                                    <li><a href="get_room_type_price_page?pageNumber=${itemPage}">${itemPage}</a></li>
+                                    <li><a href="get_customer_info_page?pageNumber=${itemPage}">${itemPage}</a></li>
                                 </c:if>
                             </c:forEach>
 
@@ -104,7 +101,7 @@
                                     </a>
                                 </li>
                             </c:if>
-                            <li><a href="get_room_type_price_page?pageNumber=${page.total}">尾页</a></li>
+                            <li><a href="get_customer_info_page?pageNumber=${page.total}">尾页</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -124,27 +121,28 @@
     $(".prePage").click(function () {
          if (pageNumber > 1){
              var pageNo = pageNumber - 1;
-             $(this).attr("href", "get_room_type_price_page?pageNumber="+pageNo);
+             $(this).attr("href", "get_customer_info_page?pageNumber="+pageNo);
          }
     });
     //下一页
     $(".nextPage").click(function () {
         if (pageNumber < total){
             var pageNo = pageNumber + 1;
-            $(this).attr("href", "get_room_type_price_page?pageNumber="+pageNo);
+            $(this).attr("href", "get_customer_info_page?pageNumber="+pageNo);
         }
     });
     //删除
-    $(".tyep_price_delete_btn").click(function () {
-        var delRoomTypeNum = $(this).parent().parent().find("td:eq(0)").text();
+    $(".customer_delete_btn").click(function () {
+        var delCustomerNum = $(this).parent().parent().find("td:eq(0)").text();
+        var delCustomerName = $(this).parent().parent().find("td:eq(2)").text();
         var pageNumber = ${page.pageNumber};
-        if (confirm("确认删除套餐编号为【"+ delRoomTypeNum +"】的信息吗？")){
-        	$.post("del_room_type_price_byid?roomTypeNum="+delRoomTypeNum,function(result){
+        if (confirm("确认删除顾客姓名为【"+ delCustomerName +"】的信息吗？")){
+        	$.post("del_customer_info_byid?customerNum="+delCustomerNum,function(result){
         		 if (result.code == 200){
-                     alert("删除成功！");
-                     window.location.href="get_room_type_price_page?pageNumber="+pageNumber;
+                     alert(result.msg);
+                     window.location.href="get_customer_info_page?pageNumber="+pageNumber;
                  }else {
-                     alert("删除失败！");
+                     alert(result.msg);
                  }
         	})
         }

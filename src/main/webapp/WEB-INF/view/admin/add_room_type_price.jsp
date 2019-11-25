@@ -27,7 +27,7 @@
                 <h4 class="modal-title">客房套餐新增</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal add_room_type_price_form" onsubmit="return false">
+                <form class="form-horizontal add_room_type_price_form" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">客房类型</label>
                         <div class="col-sm-8">
@@ -39,6 +39,13 @@
                         <label  class="col-sm-2 control-label">床型</label>
                         <div class="col-sm-8">
                             <input type="text" name="bedType" class="form-control" id="add_bedType" placeholder="如：大床、小床、双人床">
+                            <span  class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">详图</label>
+                        <div class="col-sm-8">
+                            <input type="file" name="file" id="add_roomTypeImg">
                             <span  class="help-block"></span>
                         </div>
                     </div>
@@ -103,6 +110,8 @@ $(function(){
 	var roomPriceName=false;
 	//判断套餐描述格式
 	var roomTypeDecs=false;
+	//判断图片格式
+	var roomTypeImg=false;
 	//判断客房类型格式
 	var roomTypeName=false;
 
@@ -128,6 +137,14 @@ $(function(){
          }else{
              $(this).next().css("color","green").html("√");
              roomPrice = true;
+         }
+	 });
+    //图片失去焦点时
+	 $("#add_roomTypeImg").blur(function(){
+         if($(":file").val()==""){
+             roomTypeImg = false;
+         }else{
+             roomTypeImg = true;
          }
 	 });
     //早餐类型框失去焦点时
@@ -182,7 +199,7 @@ $(function(){
 	 });
 	 //单击保存时
 	 $(".roomTypePrice_save_btn").click(function(){
-        if(bedType==true&&breakfastType==true&&floor==true&&roomPrice==true
+        if(bedType==true&&breakfastType==true&&roomTypeImg==true&&floor==true&&roomPrice==true
             &&roomPriceName==true&&roomTypeDecs==true&&roomTypeName==true){
              $.post("ins_room_type_price_info",$(".add_room_type_price_form").serialize(),function (result) {
                 if(result.code==200){
