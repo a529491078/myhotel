@@ -215,7 +215,7 @@
 
   <!-- 根据ID查询客房套餐 -->
   <select id="findRoomTypeAndRoomPriceById" resultMap="RoomTypeAndRoomPriceDTOMap">
-    select t.room_type_num,room_type_name,bed_type,room_type_img,floor,room_type_decs,room_price_name,
+    select t.room_type_num,room_type_name,room_type_img,bed_type,room_type_img,floor,room_type_decs,room_price_name,
     breakfast_type,room_price
     from room_type t
     LEFT JOIN room_price p on t.room_type_num = p.room_type_num

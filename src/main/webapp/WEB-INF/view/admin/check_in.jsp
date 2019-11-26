@@ -106,7 +106,8 @@ $(function(){
                      window.location.href="main";
                 }else{
                     alert(result.msg);
-                    window.location.href="check_in";
+                    //window.location.href="check_in";
+                    alert("跳转到预订界面")
                 }
              });
          }else{
