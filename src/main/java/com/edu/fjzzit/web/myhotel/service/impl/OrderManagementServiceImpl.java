@@ -8,6 +8,8 @@ import com.edu.fjzzit.web.myhotel.model.RoomOrder;
 import com.edu.fjzzit.web.myhotel.model.RoomOrderDetail;
 import com.edu.fjzzit.web.myhotel.service.OrderManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "orderManagement")
     public Page findRoomOrderDetailAll(int pageNumber, int pageSize) {
         Page page=new Page();
         page.setPageSize(pageSize);
@@ -73,6 +76,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value = "orderManagement")
     public int delRoomOrderDetailById(Long roomOrderDetailId) {
         return roomOrderDetailMapper.deleteByPrimaryKey(roomOrderDetailId);
     }
@@ -83,6 +87,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "orderManagement")
     public RoomOrderDetailAndRoomOrderDTO findRoomOrderDetailById(Long roomOrderDetailId) {
         //根据主键查询订单详情表
         RoomOrderDetail roomOrderDetail = roomOrderDetailMapper.selectByPrimaryKey(roomOrderDetailId);
@@ -113,6 +118,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value = "orderManagement")
     public int updRoomOrderDetailAll(RoomOrderDetailAndRoomOrderDTO roomOrderDetailAndRoomOrderDTO) {
         return roomOrderDetailMapper.updRoomOrderDetailAll(roomOrderDetailAndRoomOrderDTO);
     }

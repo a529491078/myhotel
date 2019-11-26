@@ -12,6 +12,8 @@ import com.edu.fjzzit.web.myhotel.model.RoomPrice;
 import com.edu.fjzzit.web.myhotel.model.RoomType;
 import com.edu.fjzzit.web.myhotel.service.RoomManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "roomManagement")
     public Page findRoomInfoAll(int pageNumber, int pageSize) {
         Page page=new Page();
         page.setPageSize(pageSize);
@@ -82,6 +85,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "roomTypePriceManagement")
     public Page findRoomTypeAndRoomPriceAll(int pageNumber, int pageSize) {
         Page page=new Page();
         page.setPageSize(pageSize);
@@ -105,6 +109,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomManagement",allEntries=true)
     public int insRoomInfo(RoomInfo roomInfo) {
         return roomInfoMapper.insert(roomInfo);
     }
@@ -114,6 +119,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "roomTypePriceManagement")
     public List<RoomPriceNameAndRoomTypeNumDTO> findRoomPriceNameAll() {
         return roomInfoMapper.findRoomPriceNameAll();
     }
@@ -125,6 +131,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomManagement",allEntries=true)
     public int delRoomInfoById(Integer roomId) {
         return roomInfoMapper.deleteByPrimaryKey(roomId);
     }
@@ -135,6 +142,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "roomManagement")
     public RoomInfo findRoomInfoById(Integer roomId) {
         return roomInfoMapper.selectByPrimaryKey(roomId);
     }
@@ -146,6 +154,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value = "roomTypePriceManagement",key="#roomIdbuildingNum")
     public int findNotRoomIdById(String roomId,String buildingNum) {
         return roomInfoMapper.queryRoomNumByRoomNumAndBuildingNum(roomId,buildingNum);
     }
@@ -157,6 +166,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomManagement",allEntries=true)
     public int updRoomInfoAll(RoomInfo roomInfo) {
         return roomInfoMapper.updateByPrimaryKey(roomInfo);
     }
@@ -167,6 +177,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomTypePriceManagement",allEntries=true)
     public void insRoomTypeAndRoomPrice(RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO) {
         RoomType roomType=new RoomType();
         String roomTypeName = roomTypeAndRoomPriceDTO.getRoomTypeName();
@@ -174,6 +185,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
         roomType.setBedType(roomTypeAndRoomPriceDTO.getBedType());
         roomType.setFloor(roomTypeAndRoomPriceDTO.getFloor());
         roomType.setRoomTypeDecs(roomTypeAndRoomPriceDTO.getRoomTypeDecs());
+        roomType.setRoomTypeImg(roomTypeAndRoomPriceDTO.getRoomTypeImg());
         //添加客房类型表
         roomTypeMapper.insertSelective(roomType);
         //查询新添加的套餐主键
@@ -194,6 +206,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomTypePriceManagement",allEntries=true)
     public int delRoomTypeAndRoomPriceById(Long roomTypeNum) {
         return roomInfoMapper.delRoomTypeAndRoomPriceById(roomTypeNum);
     }
@@ -204,6 +217,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      * @return
      */
     @Override
+    @Cacheable(value="roomTypePriceManagement")
     public RoomTypeAndRoomPriceDTO findRoomTypeAndRoomPriceById(Long roomTypeNum) {
         return roomInfoMapper.findRoomTypeAndRoomPriceById(roomTypeNum);
     }
@@ -215,6 +229,7 @@ public class RoomManagementServiceImpl implements RoomManagementService {
      */
     @Override
     @Transactional
+    @CacheEvict(value="roomTypePriceManagement",allEntries=true)
     public int updRoomTypeAndRoomPriceAll(RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO) {
         return roomInfoMapper.updRoomTypeAndRoomPriceAll(roomTypeAndRoomPriceDTO);
     }

@@ -36,11 +36,14 @@ dependencies {
     implementation 'commons-io:commons-io:2.4'
     implementation'javax.servlet:javax.servlet-api:3.1.0'
     implementation 'javax.servlet:jstl:1.2'
+    implementation 'net.sf.ehcache:ehcache:2.10.4'
     implementation 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-cache'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.1.0'
 }
 

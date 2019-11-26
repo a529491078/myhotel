@@ -191,23 +191,25 @@ public class RoomManagementController {
     @RequiresRoles(value={"admin"},logical = Logical.OR)
     public ResultJson updRoomTypeAndRoomPriceAll(MultipartFile file_img,RoomTypeAndRoomPriceDTO roomTypeAndRoomPriceDTO){
         try{
-            String uuto =UUID.randomUUID().toString()+file_img.getOriginalFilename().substring(file_img.getOriginalFilename().lastIndexOf("."));
-            //数据库保存路径
-            String fileName ="/static/admin/login/upload/"+uuto;
-            //classPath路径
-            String classPath = ClassUtils.getDefaultClassLoader().getResource("static/admin/login/upload/").getPath()+uuto;
-            InputStream is = file_img.getInputStream();
-            FileOutputStream fos = new FileOutputStream(classPath);
-            byte b[] = new byte[1024 * 1024];
-            int length = 0;
-            while (-1 != (length = is.read(b))) {
-                fos.write(b, 0, length);
-                fos.flush();
-                fos.close();
+            if (file_img!=null) {
+                String uuto = UUID.randomUUID().toString() + file_img.getOriginalFilename().substring(file_img.getOriginalFilename().lastIndexOf("."));
+                //数据库保存路径
+                String fileName = "/static/admin/login/upload/" + uuto;
+                //classPath路径
+                String classPath = ClassUtils.getDefaultClassLoader().getResource("static/admin/login/upload/").getPath() + uuto;
+                InputStream is = file_img.getInputStream();
+                FileOutputStream fos = new FileOutputStream(classPath);
+                byte b[] = new byte[1024 * 1024];
+                int length = 0;
+                while (-1 != (length = is.read(b))) {
+                    fos.write(b, 0, length);
+                    fos.flush();
+                    fos.close();
+                }
+                roomTypeAndRoomPriceDTO.setRoomTypeImg(fileName);
             }
-            roomTypeAndRoomPriceDTO.setRoomTypeImg(fileName);
-            roomManagementService.updRoomTypeAndRoomPriceAll(roomTypeAndRoomPriceDTO);
-            return new ResultJson("200","修改成功!",null);
+                roomManagementService.updRoomTypeAndRoomPriceAll(roomTypeAndRoomPriceDTO);
+                return new ResultJson("200", "修改成功!", null);
         }catch(Exception e){
             e.printStackTrace();
             return new ResultJson("400","修改失败!",null);

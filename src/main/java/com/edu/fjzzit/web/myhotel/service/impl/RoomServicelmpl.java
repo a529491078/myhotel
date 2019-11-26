@@ -7,6 +7,8 @@ import com.edu.fjzzit.web.myhotel.mapper.*;
 import com.edu.fjzzit.web.myhotel.model.*;
 import com.edu.fjzzit.web.myhotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class RoomServicelmpl implements RoomService {
      * @return
      */
     @Override
+    @Cacheable(value = "room")
     public List<FreeRoomDTO> findFreeRoom(String checkInDate, String checkOutDate) {
 
         try {
@@ -95,6 +98,7 @@ public class RoomServicelmpl implements RoomService {
      * @return
      */
     @Override
+    @CacheEvict(value = "room")
     public Long reserveRoom(RoomOrderDTO roomOrderDTO) {
         RoomOrder roomOrder;
         RoomOrderDetail roomOrderDetail;
@@ -149,6 +153,7 @@ public class RoomServicelmpl implements RoomService {
      * @throws Exception
      */
     @Override
+    @CacheEvict
     public void cancelOrder(Long orderNum) throws Exception {
         Byte orderState=roomOrderMapper.findOrderState(orderNum);
         System.out.println("状态值为："+orderState);
