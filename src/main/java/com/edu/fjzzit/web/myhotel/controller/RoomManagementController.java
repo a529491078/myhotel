@@ -57,7 +57,7 @@ public class RoomManagementController {
 
     @RequestMapping("/get_roomPriceName_roomTypeNum")
     @ResponseBody
-    @RequiresRoles(value={"admin"},logical = Logical.OR)
+    @RequiresUser
     public List<RoomPriceNameAndRoomTypeNumDTO> findRoomPriceNameAll(){
         List<RoomPriceNameAndRoomTypeNumDTO> roomPriceNameAll=null;
         try{

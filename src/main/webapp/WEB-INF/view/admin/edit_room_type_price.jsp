@@ -125,15 +125,15 @@ $(function(){
              roomTypeName = true;
 			}
 	 });
-    //套餐价格框失去焦点时
-	 $("#upd_roomPrice").blur(function(){
-         if(!$(this).val().match(/^[1-9]\d{0,2}$/)){
-             $(this).next().css("color","red").html("X");
-             roomPrice = false;
-         }else{
-             $(this).next().css("color","green").html("√");
-             roomPrice = true;
-         }
+    //客房类型框失去焦点时
+	 $("#upd_roomTypeName").blur(function(){
+		 if($(this).val()== ''){
+				$(this).next().css("color","red").html("X");
+             roomTypeName = false;
+			}else{
+				$(this).next().css("color","green").html("√");
+             roomTypeName = true;
+			}
 	 });
     //早餐类型框失去焦点时
 	 $("#upd_breakfastType").blur(function(){

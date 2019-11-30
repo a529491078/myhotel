@@ -77,7 +77,6 @@ public class CheckInInfoServiceImpl implements CheckInInfoService {
                     checkInInfoDTO.setRoomNum(roomNum);
                     checkInInfoDTO.setCustomerId(customerID);
                     checkInInfoDTO.setCheckInState(0);
-
                     checkInInfoMapper.insert(checkInInfoDTO);
                     //订单状态变更->room_order_state(0->未入住,1->已入住)
                     //设置订单状态为1->已入住
