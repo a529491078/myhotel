@@ -129,7 +129,7 @@ $(function(){
              roomTypeName = true;
 			}
 	 });
-    //套餐价格框失去焦点时
+     //套餐价格框失去焦点时
 	 $("#add_roomPrice").blur(function(){
          if(!$(this).val().match(/^[1-9]\d{0,2}$/)){
              $(this).next().css("color","red").html("X");
